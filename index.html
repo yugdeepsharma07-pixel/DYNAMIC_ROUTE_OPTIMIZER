@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Dynamic Route Optimizer
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <div>
+
+        <h1>
+            Dynamic Route Optimizer
+        </h1>
+
+        <p>
+            Real-Time Delivery Control Center
+        </p>
+
+    </div>
+
+
+    <div class="system-status">
+
+        <span class="status-dot"></span>
+
+        System Online
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- ================================================= -->
+    <!-- STATISTICS -->
+    <!-- ================================================= -->
+
+    <section class="stats">
+
+
+        <div class="stat-card">
+
+            <span>🚚</span>
+
+            <div>
+
+                <p>Vehicles</p>
+
+                <strong id="vehicleCount">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <span>📦</span>
+
+            <div>
+
+                <p>Active Orders</p>
+
+                <strong id="orderCount">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <span>⚡</span>
+
+            <div>
+
+                <p>High Priority</p>
+
+                <strong id="highPriorityCount">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <span>⚠️</span>
+
+            <div>
+
+                <p>At Risk</p>
+
+                <strong id="riskCount">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================= -->
+    <!-- MAIN DASHBOARD -->
+    <!-- ================================================= -->
+
+    <section class="dashboard">
+
+
+        <!-- MAP -->
+
+        <div class="panel map-panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        Live Delivery Map
+                    </h2>
+
+                    <p>
+                        Simulated delivery network
+                    </p>
+
+                </div>
+
+
+                <span
+                    id="trafficBadge"
+                    class="badge normal">
+
+                    Normal Traffic
+
+                </span>
+
+            </div>
+
+
+
+            <div
+                id="map"
+                class="map">
+
+                <svg
+                    id="routeSvg"
+                    class="route-svg"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none">
+                </svg>
+
+
+                <div id="mapMarkers"></div>
+
+            </div>
+
+
+            <div class="map-note">
+
+                <span>●</span>
+
+                Sector-based demo map.
+                Coordinates are handled automatically.
+
+            </div>
+
+        </div>
+
+
+
+        <!-- VEHICLES -->
+
+        <div class="panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        Vehicle Fleet
+                    </h2>
+
+                    <p>
+                        Current vehicle status
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div id="vehicleList"></div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================= -->
+    <!-- ADD NEW ORDER -->
+    <!-- ================================================= -->
+
+    <section class="panel add-order-panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    ➕ Add New Order
+                </h2>
+
+                <p>
+                    Enter delivery requirements manually.
+                    Coordinates are assigned automatically from the selected sector.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form
+            id="addOrderForm"
+            class="order-form">
+
+
+            <!-- CUSTOMER -->
+
+            <div class="form-group">
+
+                <label for="customerName">
+                    Customer Name
+                </label>
+
+                <input
+                    type="text"
+                    id="customerName"
+                    name="customerName"
+                    placeholder="Enter customer name"
+                    required>
+
+            </div>
+
+
+
+            <!-- SECTOR -->
+
+            <div class="form-group">
+
+                <label for="orderSector">
+                    Delivery Sector
+                </label>
+
+                <select
+                    id="orderSector"
+                    name="orderSector"
+                    required>
+
+                    <option value="">
+                        Select Sector
+                    </option>
+
+                    <option value="Sector 8">
+                        Sector 8
+                    </option>
+
+                    <option value="Sector 9">
+                        Sector 9
+                    </option>
+
+                    <option value="Sector 10">
+                        Sector 10
+                    </option>
+
+                    <option value="Sector 11">
+                        Sector 11
+                    </option>
+
+                    <option value="Sector 12">
+                        Sector 12
+                    </option>
+
+                    <option value="Sector 14">
+                        Sector 14
+                    </option>
+
+                    <option value="Sector 15">
+                        Sector 15
+                    </option>
+
+                    <option value="Sector 16">
+                        Sector 16
+                    </option>
+
+                    <option value="Sector 17">
+                        Sector 17
+                    </option>
+
+                    <option value="Sector 18">
+                        Sector 18
+                    </option>
+
+                    <option value="Sector 21">
+                        Sector 21
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- PACKAGE -->
+
+            <div class="form-group">
+
+                <label for="packageSize">
+                    Package Size
+                </label>
+
+                <input
+                    type="number"
+                    id="packageSize"
+                    name="packageSize"
+                    min="1"
+                    max="10"
+                    value="2"
+                    required>
+
+                <small>
+                    Capacity units
+                </small>
+
+            </div>
+
+
+
+            <!-- PRIORITY -->
+
+            <div class="form-group">
+
+                <label for="orderPriority">
+                    Priority
+                </label>
+
+                <select
+                    id="orderPriority"
+                    name="orderPriority"
+                    required>
+
+                    <option value="High">
+                        High
+                    </option>
+
+                    <option
+                        value="Medium"
+                        selected>
+
+                        Medium
+
+                    </option>
+
+                    <option value="Low">
+                        Low
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- WINDOW START -->
+
+            <div class="form-group">
+
+                <label for="windowStart">
+                    Delivery Window Start
+                </label>
+
+                <input
+                    type="time"
+                    id="windowStart"
+                    name="windowStart"
+                    value="10:00"
+                    required>
+
+            </div>
+
+
+
+            <!-- WINDOW END -->
+
+            <div class="form-group">
+
+                <label for="windowEnd">
+                    Delivery Window End
+                </label>
+
+                <input
+                    type="time"
+                    id="windowEnd"
+                    name="windowEnd"
+                    value="12:00"
+                    required>
+
+            </div>
+
+
+
+            <!-- BUTTON -->
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="add-order-button">
+
+                    ➕ Add Order
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="secondary"
+                    onclick="clearOrderForm()">
+
+                    Clear
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+        <div
+            id="formMessage"
+            class="form-message">
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================= -->
+    <!-- ROUTES -->
+    <!-- ================================================= -->
+
+    <section class="panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    Current Routes
+                </h2>
+
+                <p>
+                    Live assignments generated by the route engine
+                </p>
+
+            </div>
+
+
+            <button
+                id="generateButton"
+                onclick="generateRoutes()">
+
+                Generate Routes
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="routeList"
+            class="route-list">
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================= -->
+    <!-- ORDERS -->
+    <!-- ================================================= -->
+
+    <section class="panel">
+
+
+        <div class="panel-header order-header">
+
+
+            <div>
+
+                <h2>
+                    Order Queue
+                </h2>
+
+                <p>
+                    Delivery requirements and assignment status
+                </p>
+
+            </div>
+
+
+
+            <!-- SORT CONTROL -->
+
+            <div class="order-controls">
+
+                <label for="orderSort">
+                    Sort by:
+                </label>
+
+
+                <select
+                    id="orderSort"
+                    onchange="sortOrders()">
+
+                    <option value="default">
+                        Location
+                    </option>
+
+                    <option value="priority">
+                        Priority
+                    </option>
+
+                    <option value="deadline">
+                        Delivery Deadline
+                    </option>
+
+                    <option value="window">
+                        Delivery Window
+                    </option>
+
+                    <option value="package">
+                        Package Size
+                    </option>
+
+                    <option value="customer">
+                        Customer
+                    </option>
+
+                    <option value="assignment">
+                        Vehicle Assignment
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-wrapper">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Order
+                        </th>
+
+                        <th>
+                            Customer
+                        </th>
+
+                        <th>
+                            Sector
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                        <th>
+                            Package
+                        </th>
+
+                        <th>
+                            Delivery Window
+                        </th>
+
+                        <th>
+                            Vehicle
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="orderTableBody">
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================= -->
+    <!-- EVENTS -->
+    <!-- ================================================= -->
+
+    <section class="panel events-panel">
+
+
+        <div class="panel-header">
+
+
+            <div>
+
+                <h2>
+                    Simulate Real-World Events
+                </h2>
+
+                <p>
+                    Test how the optimizer reacts
+                    when conditions change.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="event-buttons">
+
+
+            <button
+                class="danger"
+                onclick="vehicleBreakdown()">
+
+                🚨 Vehicle Breakdown
+
+            </button>
+
+
+
+            <button
+                class="warning-button"
+                onclick="trafficChange()">
+
+                🚦 Traffic Change
+
+            </button>
+
+
+
+            <button
+                onclick="newOrder()">
+
+                📦 New Priority Order
+
+            </button>
+
+
+
+            <button
+                class="secondary"
+                onclick="resetSimulation()">
+
+                ↻ Reset Simulation
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================= -->
+    <!-- EVENT LOG -->
+    <!-- ================================================= -->
+
+    <section class="panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    System Event Log
+                </h2>
+
+                <p>
+                    Recent optimization events
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="eventLog"
+            class="event-log">
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        Dynamic Route Optimizer • Haryana Hackathon 2026
+    </p>
+
+</footer>
+
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
